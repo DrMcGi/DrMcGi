@@ -1,26 +1,190 @@
+/* src/app/globals.css */
+
+/* Tailwind entry */
 @import "tailwindcss";
 
+/* Theme tokens + mode system */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --ink: 17 17 20;
+  --champagne: 250 246 238;
+  --glowGold1: 245 208 111;
+  --neon: 110 255 220;
+  --bg: var(--ink);
+  --fg: 255 255 255;
+  --card: 30 30 34;
+}
+:root[data-theme="light"] {
+  --bg: var(--champagne);
+  --fg: 20 20 24;
+  --card: 245 242 236;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+html, body {
+  background-color: rgb(var(--bg));
+  color: rgb(var(--fg));
+  font-family: system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* Smooth scrolling */
+html { scroll-behavior: smooth; }
+
+/* Micro-noise overlay for tactile luxury */
+.noise-overlay::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.6' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
+  opacity: 0.04;
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Glass glow card */
+.glass-glow {
+  border: 1px solid rgba(255,255,255,0.08);
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03)),
+    rgba(var(--card), 0.35);
+  backdrop-filter: blur(16px);
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.06) inset,
+    0 24px 80px rgba(0,0,0,0.35);
+}
+
+/* Header logo shimmer */
+.logo-text {
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  background: linear-gradient(90deg, #ffffff, #d4af37, #ffffff, #c9c9c9);
+  background-size: 300% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: shimmerText 6s linear infinite;
+}
+
+/* Footer logo — synced shimmer */
+.footer-logo {
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  background: linear-gradient(90deg, #f5d06f, #ffffff, #f5d06f);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: shimmerText 8s ease-in-out infinite;
+}
+
+/* Shimmer highlight for headings */
+.shimmer {
+  background: linear-gradient(90deg, #fff, #ffe8a6, #fff);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: shimmerText 2.6s linear infinite;
+}
+
+/* WhatsApp pulse */
+#waButton {
+  box-shadow: 0 8px 24px rgba(37, 211, 102, 0.35);
+  animation: pulse 2.2s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.03); }
+}
+
+/* Dividers */
+.divider {
+  height: 1px;
+  background-color: rgba(255,255,255,0.1);
+  margin: 0.5rem 0;
+}
+
+/* Elevation + interactive cursor aura */
+.cursor-aura {
+  position: fixed; left: 0; top: 0;
+  width: 28px; height: 28px;
+  border-radius: 9999px;
+  pointer-events: none;
+  background: radial-gradient(circle, rgba(245,208,111,0.35), rgba(245,208,111,0.0) 60%);
+  transform: translate(-50%, -50%);
+  z-index: 1000;
+  transition: transform 0.06s linear, width 120ms ease, height 120ms ease, background 120ms ease;
+}
+.cursor-aura.interactive {
+  width: 36px; height: 36px;
+  background: radial-gradient(circle, rgba(110,255,220,0.4), rgba(110,255,220,0.0) 60%);
+}
+
+/* Buttons (no @apply) */
+.btn-primary {
+  padding: 0.625rem 1.5rem;
+  border-radius: 0.375rem;
+  background-color: #fff;
+  color: rgb(var(--bg));
+  font-weight: 600;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.15s ease, opacity 0.2s;
+}
+.btn-primary:hover { opacity: 0.92; }
+.btn-primary:active { transform: translateY(1px); }
+.btn-primary::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,0.35), rgba(255,255,255,0));
+}
+.btn-primary:hover::after { animation: sweep 1.6s linear; }
+
+.btn-secondary {
+  padding: 0.625rem 1.5rem;
+  border-radius: 0.375rem;
+  background-color: rgb(var(--bg));
+  border: 1px solid rgba(255,255,255,0.18);
+  color: rgb(var(--fg));
+  font-weight: 500;
+  box-shadow: 0 0 0 rgba(0,0,0,0);
+  transition: background-color 0.2s, box-shadow 0.2s, transform 0.15s;
+}
+.btn-secondary:hover { background-color: rgba(var(--bg),0.7); box-shadow: 0 0 24px rgba(245,208,111,0.15); }
+.btn-secondary:active { transform: translateY(1px); }
+
+.btn-gold {
+  padding: 0.625rem 1.5rem;
+  border-radius: 0.375rem;
+  background-color: rgb(var(--glowGold1));
+  color: rgb(var(--bg));
+  font-weight: 600;
+  box-shadow: 0 0 18px rgba(245,208,111,0.25);
+  transition: filter 0.2s, transform 0.15s;
+}
+.btn-gold:hover { filter: brightness(1.08); }
+.btn-gold:active { transform: translateY(1px); }
+
+/* Currency dropdown */
+.currency-select {
+  background-color: rgba(var(--bg),1);
+  border: 1px solid rgba(255,255,255,0.2);
+  color: rgb(var(--fg));
+  border-radius: 0.375rem;
+  padding: 0.375rem 0.5rem;
+  font-size: 0.875rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.currency-select:hover { border-color: rgba(255,255,255,0.35); }
+.currency-select:focus { outline: none; box-shadow: 0 0 0 2px rgba(245,208,111,0.5); }
+
+/* Fade-up reveal: start visible to avoid hidden content, animate in when .revealed added */
+.fade-up {
+  opacity: 1;
+  transform: translateY(0);
+}
+.fade-up.revealed {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 620ms ease, transform 620ms ease;
 }
