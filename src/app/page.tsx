@@ -20,14 +20,12 @@ import BlueprintGenerator from "@/components/BlueprintGenerator";
 import { features } from "@/utils/features";
 
 export default function HomePage() {
-  // Selected states drive estimate + ROI
   const [selectedFeatures, setSelectedFeatures] = useState<Set<string>>(
     new Set(["responsive", "seoOptimization", "luxuryUI"])
   );
   const [selectedPackage, setSelectedPackage] = useState<string | null>(null);
   const [selectedTier, setSelectedTier] = useState<string | null>(null);
 
-  // Compute total investment based on selected features
   const computeTotal = () => {
     let base = 0;
     features.forEach((f) => {
@@ -40,7 +38,6 @@ export default function HomePage() {
   };
   const totalInvestment = computeTotal();
 
-  // Reveal animation observer
   useEffect(() => {
     const io = new IntersectionObserver(
       (entries) =>
@@ -62,36 +59,36 @@ export default function HomePage() {
         <HeroSection />
         <TailoredPackages />
 
-        {/* Packages — clicking card auto-selects features and updates estimate */}
+        {/* Package cards */}
         <PackageSelector
           selectedId={selectedPackage}
           onSelect={(featuresArr, id) => {
             setSelectedFeatures(new Set(featuresArr));
             setSelectedPackage(id);
-            setSelectedTier(null); // ensure only one selection source is active
+            setSelectedTier(null);
           }}
         />
 
-        {/* Configurator — manual feature toggles also update estimate */}
+        {/* Manual feature toggles */}
         <BuildConfigurator
           selected={selectedFeatures}
           onChange={(next) => setSelectedFeatures(next)}
         />
 
-        {/* Pricing tiers — clickable cards that auto-select recommended features */}
+        {/* Pricing tiers */}
         <PricingTiers
           selectedId={selectedTier}
           onSelect={(featuresArr, id) => {
             setSelectedFeatures(new Set(featuresArr));
             setSelectedTier(id);
-            setSelectedPackage(null); // clear package when tier chosen
+            setSelectedPackage(null);
           }}
         />
 
-        {/* ROI calculator synced with current investment */}
+        {/* ROI calculator */}
         <ROICalculator investment={totalInvestment} />
 
-        {/* Downloadable blueprint summary of selections */}
+        {/* Blueprint summary */}
         <BlueprintGenerator selected={selectedFeatures} total={totalInvestment} />
 
         <TrustDashboard />
