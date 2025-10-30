@@ -1,4 +1,3 @@
-// src/app/page.tsx
 "use client";
 
 import { useEffect, useState } from "react";
@@ -20,12 +19,14 @@ import BlueprintGenerator from "@/components/BlueprintGenerator";
 import { features } from "@/utils/features";
 
 export default function HomePage() {
+  // Track selections
   const [selectedFeatures, setSelectedFeatures] = useState<Set<string>>(
     new Set(["responsive", "seoOptimization", "luxuryUI"])
   );
   const [selectedPackage, setSelectedPackage] = useState<string | null>(null);
   const [selectedTier, setSelectedTier] = useState<string | null>(null);
 
+  // Compute total investment
   const computeTotal = () => {
     let base = 0;
     features.forEach((f) => {
@@ -38,6 +39,7 @@ export default function HomePage() {
   };
   const totalInvestment = computeTotal();
 
+  // Reveal animation
   useEffect(() => {
     const io = new IntersectionObserver(
       (entries) =>
